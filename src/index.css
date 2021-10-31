@@ -11,3 +11,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.zeroPadding{
+  padding: 0;
+}
+.zeroTopBottomPadding{
+  padding-top: 0;
+  padding-bottom: 0;
+
+}
+.zeroRigthLeftPadding{
+  padding-left: 0;
+  padding-right: 0;
+}
