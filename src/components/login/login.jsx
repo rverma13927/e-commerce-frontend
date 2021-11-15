@@ -1,73 +1,141 @@
 import React, { Component } from "react";
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+
+
+
 import properties from "../../envVariables/local";
 import axios from "axios";
 import Autentication from '../../service/authentication'
 
-import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
-export default class Login3 extends Component {
-        constructor(props){
-            super(props);
-            this.state ={ 
-                 username : '',
-                 password: '',  
-            }
+
+function Copyright(props) {
+  return (
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      <Link color="inherit" href="https://mui.com/">
+        Your Website
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
+
+const theme = createTheme();
+
+export default class Login extends Component {
+
+
+    constructor(props){
+        super(props);
+        this.state ={ 
+             username : '',
+             password: '',  
         }
-    
-handleSubmit = event => {
-    event.preventDefault();
-    
-    Autentication.login(this.state.username,this.state.password).then(res=>{
-        window.location = "/product";
-    });
-   
-    
-  }
-handleChangeUsername = event =>{
-    this.setState({ username: event.target.value});
-  }
-
-  handleChangePassword = event =>{
-    this.setState({ password: event.target.value});
-  }
-
- render() {
-        return (
-            <Container fluid>
-                <Row > 
-                <Col xs={1} md={3}></Col>
-                    <Col xs={6} >
-            <form onSubmit = { this.handleSubmit }>
-                <h3>Sign In</h3>
-
-                <div className="form-group">
-                    <label>Email address</label>
-                    <input type="text" className="form-control" placeholder="Enter email"  onChange= {this.handleChangeUsername} />
-                </div>
-
-                <div className="form-group">
-                    <label>Password</label>
-                    <input type="password" className="form-control" placeholder="Enter password" onChange= {this.handleChangePassword} />
-                </div>
-
-                <div className="form-group">
-                    <div className="custom-control custom-checkbox">
-                        <input type="checkbox" className="custom-control-input" id="customCheck1" />
-                        <label className="custom-control-label" htmlFor="customCheck1">Remember me</label>
-                    </div>
-                </div>
-
-                <button type="submit" className="btn btn-primary btn-block" >Submit</button>
-                <p className="forgot-password text-right">
-                    Forgot <a href="#">password?</a>
-                </p>
-            </form>
-            <Col xs={1} md={3}></Col>
-            </Col>
-            </Row>
-            </Container>
-        );
     }
+
+handleSubmit = event => {
+event.preventDefault();
+
+Autentication.login(this.state.username,this.state.password).then(res=>{
+    window.location = "/product";
+});
+}
+handleChangeUsername = event =>{
+this.setState({ username: event.target.value});
+}
+
+handleChangePassword = event =>{
+this.setState({ password: event.target.value});
+}
+
+render(){
+  return (
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <Box component="form" onSubmit={this.handleSubmit} noValidate sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              onChange= {this.handleChangeUsername}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange= {this.handleChangePassword}
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="#" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+        <Copyright sx={{ mt: 8, mb: 4 }} />
+      </Container>
+    </ThemeProvider>
+  );
+        }
 }

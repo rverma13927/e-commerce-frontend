@@ -9,7 +9,7 @@ export default function Product() {
         method: 'GET',
         // body: {}, // whatever data you want to send
       }
-      useEffect(() => {
+    useEffect(() => {
         //   effect
 
        axios.get(properties.url+'product').then((response)=>{
