@@ -9,6 +9,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Product from './components/productsPage/Products';
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom'  
 import Productcard from './components/ProductCard/Productcard';
+import AddProduct from './components/admin/addProduct';
+
 function App() {
   return (
     <div className="App">
@@ -24,10 +26,16 @@ function App() {
         
         {/* <Customer/>
         <Product/> */}
+        <AddProduct/>
 
        <Router>
-        <Route path="/" component={Product} />  
-      <Route path="/about" component={Customer} />  
+        <Route exact path="/" component={Product} />  
+       <Route exact path="/about" component={Customer} />  
+
+      <Route  path="/product-info/:id" component={Customer} /> 
+      
+
+
       {/* <Route path="/contact" component={Contact} />   */}
         </Router>
       </header>

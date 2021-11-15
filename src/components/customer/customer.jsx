@@ -5,6 +5,8 @@ class Customer extends React.Component{
         constructor(props){
             super(props);
             this.price=0;
+
+            
           //  var response= Customerservice.getCustomerById(1);
           //  response.then((result)=>{
              
