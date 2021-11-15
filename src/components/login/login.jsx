@@ -14,15 +14,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
-
-
-import properties from "../../envVariables/local";
-import axios from "axios";
 import Autentication from '../../service/authentication'
-
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-
 
 function Copyright(props) {
   return (

@@ -10,6 +10,7 @@ import Product from './components/productsPage/Products';
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom'  
 import Productcard from './components/ProductCard/Productcard';
 import Login from './components/login/login';
+import SignUp from './components/signup/signup';
 function App() {
   return (
     <div className="App">
@@ -30,6 +31,7 @@ function App() {
         <Route exact path="/" component={Product} />  
       <Route exact path="/about" component={Customer} />  
       <Route exact path="/login" component={Login} />  
+      <Route exact path="/signup" component={SignUp} />  
         </Router>
       </header>
     </div>
