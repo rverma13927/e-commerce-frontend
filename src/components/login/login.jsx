@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import { Redirect } from 'react-router';
 
 import Autentication from '../../service/authentication'
 
@@ -39,6 +39,8 @@ export default class Login extends Component {
         this.state ={ 
              username : '',
              password: '',  
+             redirect: false,
+             changePageOnLogin:false
         }
     }
 
@@ -46,7 +48,8 @@ handleSubmit = event => {
 event.preventDefault();
 
 Autentication.login(this.state.username,this.state.password).then(res=>{
-    window.location = "/product";
+  console.log(res)
+    this.setState({changePageOnLogin:true});
 });
 }
 handleChangeUsername = event =>{
@@ -57,7 +60,24 @@ handleChangePassword = event =>{
 this.setState({ password: event.target.value});
 }
 
+handleOnClickForSignUp = () => {
+  // redirect
+  this.setState({redirect: true});
+}
+
 render(){
+
+  if(Autentication.isLoggedIn()){
+    return <Redirect push to="/product" />;
+  }
+
+  if (this.state.changePageOnLogin) {
+    return <Redirect push to="/product" />;
+  }
+
+  if (this.state.redirect) {
+    return <Redirect push to="/signup" />;
+  }
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -118,7 +138,7 @@ render(){
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link onClick={this.handleOnClickForSignUp} variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

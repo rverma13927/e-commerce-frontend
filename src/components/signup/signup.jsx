@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import authentication from '../../service/authentication';
+import { Redirect } from 'react-router';
 
 function Copyright(props) {
   return (
@@ -41,6 +42,8 @@ export default class SignUp extends React.Component{
              username : '',
              password: '',  
              email : '',
+             redirect: false,
+             changePageOnSignUp:false
         }
     }
 
@@ -48,7 +51,7 @@ handleSubmit = event => {
 event.preventDefault();
 
 authentication.register(this.state.username,this.state.email,this.state.password,this.state.phone,this.state.firstName,this.state.lastName).then(res=>{
-        console.log("sign up successfully")
+       this.setState({changePageOnSignUp:true});
 });
 }
 handleChangeUsername = event =>{
@@ -71,8 +74,21 @@ handleChangeEmail = event =>{
     this.setState({ email: event.target.value});
 }
 
+handleOnClickForSignUp = () => {
+  // redirect
+  this.setState({redirect: true});
+}
   render(){
+
+    if (this.state.changePageOnSignUp) {
+      return <Redirect push to="/product" />;
+    }
+
+    if (this.state.redirect) {
+      return <Redirect push to="/login" />;
+    }
   return (
+
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -177,7 +193,7 @@ handleChangeEmail = event =>{
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link onClick={this.handleOnClickForSignUp} variant="body2" >
                   Already have an account? Sign in
                 </Link>
               </Grid>
