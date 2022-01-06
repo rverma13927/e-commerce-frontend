@@ -34,7 +34,7 @@ class AuthService {
     
   }
   isLoggedIn() {
-    if(localStorage.getItem("user").length!=0){
+    if(localStorage.getItem("user")!=undefined && localStorage.getItem("user").length!=0){
       return true;
     }
  }

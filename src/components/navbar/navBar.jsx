@@ -8,7 +8,7 @@
 // export default test;  
 
 
-import { CardGiftcardOutlined } from '@mui/icons-material';
+import { CardGiftcardOutlined, ShoppingCart } from '@mui/icons-material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -26,7 +26,7 @@ import { alpha, styled } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
-
+import { Redirect } from 'react-router-dom';
 //css
 import './nav.css';
 
@@ -76,6 +76,7 @@ export default function PrimarySearchAppBar() {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const [redirect, setRedirect] = React.useState(false);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -94,7 +95,10 @@ export default function PrimarySearchAppBar() {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
-
+  const handleLogOut = () => {
+    localStorage.removeItem("user");
+    setRedirect(true);
+  }
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -114,6 +118,7 @@ export default function PrimarySearchAppBar() {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
     </Menu>
   );
 
@@ -137,7 +142,7 @@ export default function PrimarySearchAppBar() {
       <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="error">
-            <CardGiftcardOutlined />
+            <ShoppingCart />
           </Badge>
         </IconButton>
         <p>Messages</p>
@@ -149,7 +154,7 @@ export default function PrimarySearchAppBar() {
           color="inherit"
         >
           <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
+            <ShoppingCart />
           </Badge>
         </IconButton>
         <p>Notifications</p>
@@ -169,7 +174,13 @@ export default function PrimarySearchAppBar() {
     </Menu>
   );
 
+  if (redirect) {
+    return <Redirect to='/login' />;
+  }
+
+
   return (
+
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
@@ -186,9 +197,9 @@ export default function PrimarySearchAppBar() {
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
+            sx={{ display: { xs: 'none', sm: 'block' }, width: "100px" }}
           >
-            MUI
+            Tlipkart
           </Typography>
           <Search>
             <SearchIconWrapper>
@@ -201,18 +212,18 @@ export default function PrimarySearchAppBar() {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+            {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="error">
                 <MailIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
             >
               <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
+                <ShoppingCart />
               </Badge>
             </IconButton>
             <IconButton
@@ -243,6 +254,7 @@ export default function PrimarySearchAppBar() {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      { }
     </Box>
   );
 }
