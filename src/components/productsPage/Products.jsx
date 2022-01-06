@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from 'react';
 import properties from "../../envVariables/local";
 import Productcard from "../ProductCard/Productcard";
+import authHeader from "../../service/authHeader";
+
 export default function Product() {
 
     const [products, setproducts] = useState(null);
@@ -11,8 +13,7 @@ export default function Product() {
       }
     useEffect(() => {
         //   effect
-
-       axios.get(properties.url+'product').then((response)=>{
+       axios.get(properties.url+'product',{headers: authHeader()}).then((response)=>{
               console.log("my product"+ response.data);
               for(var key in response.data){
                 response.data[key].features =   response.data[key].features.split(",");
