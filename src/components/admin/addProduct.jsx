@@ -18,89 +18,92 @@ import AttachMoney from '@mui/icons-material/AttachMoney';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import TextField from '@mui/material/TextField';
+
+
+const defaultValues = {
+  product_name: "",
+  price: "",
+  features: "",
+  category: "",
+  imageUrl: ""
+};
+
 export default function Category() {
   const [category, setOptionOfCategory] = useState('');
-  const [productName, setProductName] = useState();
-  const [productPrice, setProductPrice] = useState(0);
-  const [features, setFeatures] = useState();
-  const [categorySelected, setCategorySelected] = useState('');
-  const [addProductResponse, setAddProductResponse] = useState('Something went wrong!!');
-  const [imageURL, setimageURL] = useState('');
+  const [addProductResponse, setAddProductResponse] = useState('');
 
+  //Snakbar
+  const [open, setOpen] = React.useState(false);
 
   // Snakbar 
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
 
-  const [open, setOpen] = React.useState(false);
-
   const handleClick = () => {
     setOpen(true);
   };
-
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpen(false);
   };
-  // snakbar end 
+  // Snakbar end 
 
 
   useEffect(() => {
-
     categoryService.getCategories().then(res => {
       if (res) {
         setOptionOfCategory(res.data);
       }
     })
-
     return () => {
-
     }
   }, []);
-  const handleCategoryChange = (event) => {
-    console.log("fdsfs" + event.target.value)
-    setCategorySelected(event.target.value);
-  }
-  const handleFeatures = (event) => {
-    setFeatures(event.target.value);
-  }
 
-  const handleProductName = (event) => {
-    setProductName(event.target.value);
-    console.log(productName);
-  }
-  const handleProductPrice = (event) => {
+  const [formValues, setFormValues] = useState(defaultValues);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
 
-    setProductPrice(event.target.value);
-  }
-  const handleImageUrl = (event) => {
-    setimageURL(event.target.value)
-  }
   const handleSubmit = (event) => {
     event.preventDefault();
-    const product = {
-      product_name: productName,
-      price: productPrice,
-      features: features,
-      category: categorySelected,
-      imageUrl: imageURL
+    if (formValues.product_name == '') {
+      setOpen(true);
+      setAddProductResponse('Please enter the product name!!');
+      return;
+    }
+    if (formValues.price == '') {
+      setOpen(true);
+      setAddProductResponse('Please enter the product price!!');
+      return;
+    }
+    if (formValues.imageUrl == '') {
+      setOpen(true);
+      setAddProductResponse('Please enter the imageUrl!!');
+      return;
+    }
+    if (formValues.category == '') {
+      setOpen(true);
+      setAddProductResponse('Please select the product category!!');
+      return;
+    }
+    if (formValues.features == '') {
+      setOpen(true);
+      setAddProductResponse('Please enter the product features!!');
+      return;
     }
 
-
-    ProductService.addProduct(product).then((response) => {
-      console.log(response);
+    ProductService.addProduct(formValues).then((response) => {
       setAddProductResponse(response.data.message);
       setOpen(true);
 
-
-      setProductName('');
-      setProductPrice('');
-      setCategorySelected('');
-      setFeatures('');
+      setFormValues(defaultValues);
     }).catch(() => {
       setOpen(true);
 
@@ -109,8 +112,6 @@ export default function Category() {
 
   const ariaLabel = { 'aria-label': 'description' };
   return (
-
-
     <div>
       <Box
         width={900} height={500}
@@ -118,15 +119,12 @@ export default function Category() {
         alignItems="center"
         justifyContent="center"
         margin="auto"
-
       >
-
-
         <Typography color="secondary" variant="h4">
           Enter the details of the product :
         </Typography>
 
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
           <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
             {addProductResponse}
           </Alert>
@@ -141,8 +139,7 @@ export default function Category() {
                     <Inventory2Icon color="primary" fontSize="large" />
                   </Grid>
                   <Grid item xs={10} >
-                    <TextField fullWidth label="Product Name" variant="outlined" color="secondary" onChange={handleProductName} />
-                    {/* <Input fullWidth defaultValue="" inputProps={{ 'aria-label': 'description' }} placeholder="Product Name" onChange={handleProductName} /> */}
+                    <TextField fullWidth name="product_name" label="Product Name" variant="outlined" color="secondary" value={formValues.product_name} onChange={handleInputChange} />
                   </Grid>
                 </Grid>
               </Grid>
@@ -155,9 +152,8 @@ export default function Category() {
                   </Grid>
                   <Grid item xs={10} sx={{ mx: 0 }}>
                     <FormControl fullWidth>
-                      <TextField fullWidth label="Product Price" color="secondary" onChange={handleProductPrice} />
+                      <TextField fullWidth name="price" label="Product Price" color="secondary" value={formValues.price} onChange={handleInputChange} />
                     </FormControl>
-                    {/* <Input fullWidth defaultValue="" inputProps={{ 'aria-label': 'description' }} placeholder="Product Price" onChange={handleProductPrice} /> */}
                   </Grid>
 
                 </Grid>
@@ -169,8 +165,7 @@ export default function Category() {
                     <FormatListBulletedIcon color="primary" fontSize="large" />
                   </Grid>
                   <Grid item xs={10}>
-                    <TextField fullWidth label="Image Url" color="secondary" onChange={handleImageUrl} />
-                    {/* <Input defaultValue="" inputProps={{ 'aria-label': 'description' }} placeholder="Image Url" onChange={handleImageUrl} /> */}
+                    <TextField fullWidth name="imageUrl" label="Image Url" color="secondary" value={formValues.imageUrl} onChange={handleInputChange} />
 
                   </Grid>
                 </Grid>
@@ -191,9 +186,10 @@ export default function Category() {
                           labelId="category"
                           id="demo-simple-select"
                           //  this value suggest what to show in when you select
-                          value={categorySelected}
+                          name="category"
+                          value={formValues.category}
                           label="Category"
-                          onChange={handleCategoryChange}
+                          onChange={handleInputChange}
                         >
                           {
                             category && category.map((p) => {
@@ -203,10 +199,7 @@ export default function Category() {
                         </Select>
                       </FormControl>
                     </Grid>
-
                   </Grid>
-
-
                 </Box>
               </Grid>
 
@@ -219,7 +212,7 @@ export default function Category() {
               </Typography>
             </Grid>
             <Grid item xs={1}>
-              <Button onChange={handleFeatures}>
+              <Button>
                 <AddCircleIcon fullWidth color="primary" fontSize="large" />
               </Button>
             </Grid>
@@ -227,8 +220,7 @@ export default function Category() {
           <Grid container alignItems="center" justifyContent="center">
 
             <Grid item xs={8}  >
-              <TextField fullWidth label="Product Features" color="secondary" onChange={handleFeatures} />
-              {/* <Input defaultValue="" inputProps={{ 'aria-label': 'description' }} placeholder="Product Features" onChange={handleFeatures} /> */}
+              <TextField fullWidth name="features" label="Product Features" color="secondary" value={formValues.features} onChange={handleInputChange} />
             </Grid>
           </Grid>
 
