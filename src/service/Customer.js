@@ -6,11 +6,11 @@ const API_URL="http://localhost:8080/"
  class CustomerService{
 
    getCustomerById(id){
-    return axios.get(API_URL+ 'user/'+ id , {headers: authHeader()});
+    return axios.get(API_URL+ 'user/'+ id );
    }
 
     getUserByUsername(username){
-      return axios.get(API_URL+ 'user'+ username,{headers:authHeader()});
+      return axios.get(API_URL+ 'user'+ username);
     }
 
  }

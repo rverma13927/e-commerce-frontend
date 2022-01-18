@@ -10,7 +10,7 @@ class cartService {
               await axios.post(properties.url + "cart/add", {
                      userId: userId,
                      productId: productId
-              }, { headers: authHeader() }).then(res => {
+              }).then(res => {
                      return res;
               })
               return "null";
