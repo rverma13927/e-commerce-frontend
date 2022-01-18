@@ -70,37 +70,33 @@ export default function Category() {
       [name]: value,
     });
   };
-
+  const [severity, setSeverity] = useState("success");
   const handleSubmit = (event) => {
     event.preventDefault();
     if (formValues.product_name == '') {
-      setOpen(true);
-      setAddProductResponse('Please enter the product name!!');
+      setValues("error", true, 'Please enter the product name!!');
       return;
     }
     if (formValues.price == '') {
-      setOpen(true);
-      setAddProductResponse('Please enter the product price!!');
+      setValues("error", true, 'Please enter the product price!!');
       return;
     }
     if (formValues.imageUrl == '') {
-      setOpen(true);
-      setAddProductResponse('Please enter the imageUrl!!');
+      setValues("error", true, 'Please enter the imageUrl!!');
       return;
     }
     if (formValues.category == '') {
-      setOpen(true);
-      setAddProductResponse('Please select the product category!!');
+      setValues("error", true, 'Please select the product category!!');
       return;
     }
     if (formValues.features == '') {
-      setOpen(true);
-      setAddProductResponse('Please enter the product features!!');
+      setValues("error", true, 'Please enter the product features!!');
       return;
     }
 
     ProductService.addProduct(formValues).then((response) => {
       setAddProductResponse(response.data.message);
+      setSeverity("success");
       setOpen(true);
 
       setFormValues(defaultValues);
@@ -109,7 +105,11 @@ export default function Category() {
 
     });
   }
-
+  const setValues = (severity, open, message) => {
+    setSeverity(severity);
+    setOpen(open);
+    setAddProductResponse(message);
+  }
   const ariaLabel = { 'aria-label': 'description' };
   return (
     <div>
@@ -125,7 +125,7 @@ export default function Category() {
         </Typography>
 
         <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
-          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
             {addProductResponse}
           </Alert>
         </Snackbar>
@@ -225,14 +225,10 @@ export default function Category() {
           </Grid>
 
           <Button variant="contained" color="primary" type="submit" sx={{ my: 2 }}>
-            Submit
+            Add
           </Button>
         </form>
       </Box>
     </div >
-
-
   );
-
-
 }
