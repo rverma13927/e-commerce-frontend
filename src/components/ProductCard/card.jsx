@@ -9,97 +9,93 @@ import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { padding } from '@mui/system';
-import  { useEffect, useState } from 'react';
-import {useParams} from "react-router-dom";
+import { maxHeight, padding } from '@mui/system';
+import { useEffect, useState } from 'react';
+import { useParams } from "react-router-dom";
 import axios from 'axios';
 import properties from '../../envVariables/local';
 import ProductService from '../../service/ProductService';
 import cartService from '../../service/cartService';
 import localStorageService from '../../service/localStorageService';
-
+import { CardContent, Typography } from '@mui/material';
 export default function ProductCard() {
 
-    const {id} = useParams();
+  const { id } = useParams();
 
-   const [productData, setproductData] = useState()
-   const [features,setFeatures] = useState();
-   useEffect(() => {
-     
-    ProductService.getProductById(id).then(res=>{
-        setproductData(res);
-        setFeatures(JSON.stringify(res.data.features).split(","));
-        // console.log(res.data.features)
-          //  console.log("product" + JSON.stringify(productData.data.imageUrl));
+  const [productData, setproductData] = useState()
+  const [features, setFeatures] = useState();
+  useEffect(() => {
+
+    ProductService.getProductById(id).then(res => {
+      setproductData(res);
+      let s = JSON.stringify(res.data.features).replaceAll('"', '').split(",");
+      setFeatures(s);
+      console.log(s)
+      //  console.log("product" + JSON.stringify(productData.data.imageUrl));
     })
+    return () => {
+    }
+  }, [id])
 
-     return () => {
-      
-     }
-   },[id])
-
-   const addToCart =()=> {
-          const res = cartService.saveIntoCard(localStorageService.getUserId(),id);
-          console.log(res); 
+  const addToCart = () => {
+    const res = cartService.saveIntoCard(localStorageService.getUserId(), id);
+    console.log(res);
   }
 
-   if(productData==undefined) return (<span>loading...</span>);
+  if (productData == undefined) return (<span>loading...</span>);
 
 
-   if(productData!=undefined){
-      return (
+  if (productData != undefined) {
+    return (
 
-    <>
-    <Row>
-      <Col md={6}>
-    <Card sx={{ maxWidth: 400 }}>
-      <CardMedia
-        component="img"
-      
-        width="258.97"
-        // image={productData.data.imageUrl}
-        alt="green iguana"
-      />
-      {/* <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          Lizard
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Lizards are a widespread group of squamate reptiles, with over 6,000
-          species, ranging across all continents except Antarctica
-        </Typography>
-      </CardContent> */}
-      {/* <CardActions style={{paddingLeft: "0px", paddingRight:"0px", paddingTop:"8px"}}> */}
-      <CardActions style={{padding:"8px 0px"}}>
-        {/* <Button size="small">Share</Button> */}
-        {/* <i class="fa fa-shopping-cart" aria-hidden="true"></i> */}
-        <Container fluid>
-           <Row className="justify-content-md-center">
-               <Col style={{paddingLeft: "0px", paddingRight: "0px"}}><Button style={{backgroundColor:"orange", color: "white"}} onClick={addToCart}><ShoppingCartIcon/> Add to cart</Button></Col>
-               <Col><Button style={{backgroundColor:"#fb641b", color: "white"}} ><FlashOnIcon/>Buy now</Button></Col>
-           </Row>
-        </Container> 
-       
-    
-        {/* <Button size="small">Learn More</Button> */}
-      </CardActions>
-    </Card>
-     </Col>
-     <Col sm={6}>
+      <>
+        <Row>
+          <Col md={6}>
+            <Card sx={{ maxWidth: 300, maxHeight: 1000 }}>
+              <CardMedia
+                component="img"
+                // height="400px"
+                // width="258.97px"
+                image={productData.data.imageUrl}
+                alt="green iguana"
+              />
 
-     <h6 style={{textAlign : "left"}}>{productData.data.product_name}</h6>
-                         <ul style={{textAlign : "left",fontFamily: "arial",fontSize: "15px"}}>
-                          {    
-                              features && features.map((p)=>{                          
-                                return <li>{p}</li>
-                             })
-                          }
-                       </ul>
-      
+              <CardActions style={{ padding: "0px 0px", margin: 0 }}>
+                <Container fluid>
+                  <Row className="justify-content-md-center">
+                    <Col sm={7} style={{ paddingLeft: 0, paddingRight: 0, margin: 0 }}><Button style={{ fontSize: "10px", backgroundColor: "orange", color: "white" }} onClick={addToCart}><ShoppingCartIcon /> Add to cart</Button></Col>
+                    <Col sm={5} style={{ paddingLeft: 0, paddingRight: 0, margin: 0 }}><Button style={{ backgroundColor: "#fb641b", color: "white", fontSize: "10px" }} ><FlashOnIcon />Buy now</Button></Col>
+                  </Row>
+                </Container>
+              </CardActions>
+            </Card>
+          </Col>
+          <Col sm={6}>
+            <Card sx={{ maxWidth: 345 }}>
 
-     </Col>
-    </Row>
-    </>
-  );
-}
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  <h6 style={{ textAlign: "left" }}>{productData.data.product_name}</h6>
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  <ul style={{ textAlign: "left", fontFamily: "arial", fontSize: "15px" }}>
+                    {
+                      features && features.map((p) => {
+                        return <li>{p}</li>
+                      })
+                    }
+                  </ul>
+                </Typography>
+              </CardContent>
+
+            </Card>
+
+
+
+
+          </Col>
+        </Row>
+      </>
+    );
+  }
 }
